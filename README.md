@@ -1,12 +1,12 @@
 # ✨🦊 Angular Platform Cloud 🦄✨
 
 <p align="center">
-  <img src="assets/preview.gif" width="500px" alt="preview">
+  <img src="assets/preview.gif" width="600px" alt="preview">
 </p>
 
-✨🦊 The server generates renderer commands and sends them to the browser.
+✨🦊 **The server** generates renderer commands and sends them to the browser.
 
-✨🦄 The browser processes the DOM events and sends them to the server.
+✨🦄 **The browser** processes the DOM events and sends them to the server.
 
 Perhaps am thinking about goals like this:
 - lightweight browser bundle (maybe) 
@@ -17,7 +17,7 @@ Perhaps am thinking about goals like this:
 
 ## Help Wanted
 
-I invite everyone to participate in the development of ✨🦊 Angular Platform Cloud 🦄✨. To participate, just stamp the blood [Twitter](https://twitter.com/thekiba_io) or [Telegram](https://t.me/thekiba).
+I invite everyone to participate in the development of ✨🦊 **Angular Platform Cloud** 🦄✨. To participate, just stamp the blood [Twitter](https://twitter.com/thekiba_io) or [Telegram](https://t.me/thekiba).
 
 ## Development server
 
@@ -26,7 +26,7 @@ Run `ng run serve:dev` for a dev server. Navigate to `http://localhost:4200/`. T
 ## Roadmap
 
 <p align="center">
-  <img src="assets/fox-screams.jpeg" width="500px" alt="Fox Screams">
+  <img src="assets/fox-screams.jpeg" width="600px" alt="Fox Screams">
 </p>
 
  ✅ Completed
