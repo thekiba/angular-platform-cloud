@@ -1,5 +1,5 @@
 {
-  "name": "angular-nodejs",
+  "name": "angular-cloud-platform",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
@@ -8,6 +8,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
+    "serve:dev": "ts-node-dev -P projects/server/tsconfig.app.json -r tsconfig-paths/register --respawn projects/server/src/main.ts",
+    "build:libs": "ng build platform-cloud --prod && ng build platform-cloud-dynamic --prod",
     "postinstall": "ngcc --properties es2015 browser module main --first-only --create-ivy-entry-points"
   },
   "private": true,
@@ -19,19 +21,26 @@
     "@angular/forms": "~9.0.0-rc.0",
     "@angular/platform-browser": "~9.0.0-rc.0",
     "@angular/platform-browser-dynamic": "~9.0.0-rc.0",
+    "@angular/platform-server": "^8.2.13",
     "@angular/router": "~9.0.0-rc.0",
+    "@ngtools/webpack": "^9.0.0-rc.0",
+    "@nguniversal/express-engine": "latest",
+    "@nguniversal/module-map-ngfactory-loader": "latest",
+    "angular-router-loader": "^0.8.5",
+    "angular2-template-loader": "^0.6.2",
     "rxjs": "~6.5.3",
     "tslib": "^1.10.0",
     "zone.js": "~0.10.2"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.900.0-rc.0",
+    "@angular-devkit/build-ng-packagr": "~0.900.0-rc.0",
     "@angular/cli": "~9.0.0-rc.0",
     "@angular/compiler-cli": "~9.0.0-rc.0",
     "@angular/language-service": "~9.0.0-rc.0",
-    "@types/node": "^12.11.1",
     "@types/jasmine": "~3.4.0",
     "@types/jasminewd2": "~2.0.3",
+    "@types/node": "^12.11.1",
     "codelyzer": "^5.1.2",
     "jasmine-core": "~3.5.0",
     "jasmine-spec-reporter": "~4.2.1",
@@ -40,9 +49,13 @@
     "karma-coverage-istanbul-reporter": "~2.1.0",
     "karma-jasmine": "~2.0.1",
     "karma-jasmine-html-reporter": "^1.4.2",
+    "ng-packagr": "^9.0.0-rc.1",
     "protractor": "~5.4.2",
     "ts-node": "~8.3.0",
+    "ts-node-dev": "^1.0.0-pre.44",
+    "tsconfig-paths": "^3.9.0",
     "tslint": "~5.18.0",
-    "typescript": "~3.6.4"
+    "typescript": "~3.6.4",
+    "webpack-cli": "^3.1.0"
   }
 }

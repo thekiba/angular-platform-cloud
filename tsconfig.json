@@ -17,7 +17,15 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "paths": {
+      "@angular/platform-cloud": [
+        "projects/platform-cloud/src/public-api.ts"
+      ],
+      "@angular/platform-cloud-dynamic": [
+        "projects/platform-cloud-dynamic/src/public-api.ts"
+      ]
+    }
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,

@@ -1,4 +1,4 @@
-import { BrowserModule } from '@angular/platform-browser';
+import { CloudServerModule } from '@angular/platform-cloud';
 import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -9,7 +9,7 @@ import { AppComponent } from './app.component';
     AppComponent
   ],
   imports: [
-    BrowserModule,
+    CloudServerModule,
     AppRoutingModule
   ],
   providers: [],
