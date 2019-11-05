@@ -21,7 +21,7 @@ I invite everyone to participate in the development of ✨🦊 **Angular Platfor
 
 ## Development server
 
-Run `ng run serve:dev` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Run `npm run serve:dev` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
 ## Roadmap
 
