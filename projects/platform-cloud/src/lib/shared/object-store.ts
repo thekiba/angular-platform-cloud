@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { AllocatedNode } from './api';
 
 @Injectable({ providedIn: 'root' })
-export class ObjectStore {
+export class ObjectStore implements OnDestroy {
   private id = 0;
   private lookupByObject = new Map<AllocatedNode, number>();
   private lookupById = new Map<number, AllocatedNode>();
@@ -43,6 +43,10 @@ export class ObjectStore {
   clear(): void {
     this.lookupByObject.clear();
     this.lookupById.clear();
+  }
+
+  ngOnDestroy(): void {
+    this.clear();
   }
 
 }

@@ -173,8 +173,6 @@ export class ServerRenderer2 implements Renderer2 {
       ? `${ targetName }:${ eventName }`
       : null;
 
-    console.log({ target, targetEl, targetName, globalEvent });
-
     const unlisten: Function = targetName
       ? this.globalListen(globalEvent, callback)
       : targetEl.events.listen(eventName, callback);

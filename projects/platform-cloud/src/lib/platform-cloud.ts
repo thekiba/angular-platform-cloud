@@ -14,20 +14,13 @@ export { CloudServerModule } from './server';
 export { CloudBrowserModule } from './browser';
 
 export const PLATFORM_CLOUD_SHARED_PROVIDERS: StaticProvider[] = [
-  {provide: NgZone, useFactory: createNgZone, deps: []},
-  { provide: ObjectStore, useClass: ObjectStore, deps: [] },
-  { provide: Serializer, useClass: Serializer, deps: [ObjectStore] },
+  {provide: NgZone, useFactory: createNgZone, deps: []}
 ];
 
 export const PLATFORM_CLOUD_SERVER_PROVIDERS: StaticProvider[] = [
   BROWSER_SANITIZATION_PROVIDERS,
-  { provide: ViewportScroller, useClass: ServerViewportScroller, deps: [] },
-  { provide: PlatformLocation, useClass: ServerPlatformLocation, deps: [] },
   { provide: ErrorHandler, useFactory: errorHandler, deps: [] },
-  { provide: DOCUMENT, useValue: {} },
-  { provide: MessageBus, useClass: ServerMessageBus, deps: [] },
-  { provide: RendererFactory2, useClass: ServerRenderer2Factory, deps: [SharedStylesHost, MessageBus, ObjectStore, Serializer] },
-  { provide: SharedStylesHost, useClass: ServerStylesHost, deps: [DOCUMENT] }
+  { provide: DOCUMENT, useValue: {} }
 ];
 
 export const PLATFORM_CLOUD_BROWSER_PROVIDERS: StaticProvider[] = [];

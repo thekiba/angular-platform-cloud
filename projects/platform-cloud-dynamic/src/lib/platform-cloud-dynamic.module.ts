@@ -1,8 +1,14 @@
 import { ResourceLoader } from '@angular/compiler';
-import { COMPILER_OPTIONS, createPlatformFactory, PlatformRef, StaticProvider } from '@angular/core';
-import { ɵplatformCoreDynamic as platformCoreDynamic } from '@angular/platform-browser-dynamic';
-import { PLATFORM_CLOUD_SHARED_PROVIDERS, PLATFORM_CLOUD_SERVER_PROVIDERS } from '@angular/platform-cloud';
-import { Injectable } from '@angular/core';
+import {
+  COMPILER_OPTIONS,
+  createPlatformFactory,
+  Injectable,
+  ModuleWithComponentFactories,
+  PlatformRef,
+  StaticProvider
+} from '@angular/core';
+import { JitCompilerFactory as _JitCompilerFactory, ɵplatformCoreDynamic as platformCoreDynamic } from '@angular/platform-browser-dynamic';
+import { PLATFORM_CLOUD_SERVER_PROVIDERS, PLATFORM_CLOUD_SHARED_PROVIDERS } from '@angular/platform-cloud';
 
 import { readFile } from 'fs';
 import { join, resolve } from 'path';
@@ -12,7 +18,6 @@ export class ResourceLoaderImpl extends ResourceLoader {
   get(url: string): Promise<string> {
     return new Promise((res) => {
       const path = resolve(join('projects', 'server', 'src', 'app', url));
-      console.log('Loading', url, resolve(join('projects', 'server', 'src', 'app', url)));
       readFile(path, (err, data) => res(data.toString('utf-8')));
     });
   }
@@ -32,4 +37,17 @@ export const platformCloudServerDynamic =
 export function bootstrapCloudServerDynamic(customProviders: StaticProvider[] = []): Promise<PlatformRef> {
   const platform = platformCloudServerDynamic(customProviders);
   return Promise.resolve(platform);
+}
+
+/**
+ * Early hack to speed up JIT restart below.
+ */
+export function compileModuleAndAllComponentsAsync<T>(
+  platformRef: PlatformRef, module: any): Promise<ModuleWithComponentFactories<T>> {
+  const config = platformRef.injector.get(COMPILER_OPTIONS);
+
+  const JitCompilerFactory: any = _JitCompilerFactory;
+  const compilerFactory = new JitCompilerFactory([]);
+  const compiler = compilerFactory.createCompiler(config);
+  return compiler.compileModuleAndAllComponentsAsync(module);
 }
