@@ -7,6 +7,5 @@ import { CloudBrowserModule } from '@angular/platform-cloud';
   ]
 })
 export class AppModule implements DoBootstrap {
-  ngDoBootstrap(appRef: ApplicationRef): void {
-  }
+  ngDoBootstrap(appRef: ApplicationRef): void {}
 }

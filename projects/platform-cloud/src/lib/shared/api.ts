@@ -1,6 +1,5 @@
-import { Renderer2, RendererType2 } from '@angular/core';
-
-export type RenderMethods = keyof Renderer2 | 'unlisten' | 'createRenderer';
+import { RendererType2 } from '@angular/core';
+import { RendererMethods2 } from './renderer-adapter';
 
 export enum SerializerTypes {
   PRIMITIVE = 0,
@@ -13,17 +12,17 @@ export interface SerializedArg {
   value: any;
 }
 
-interface PrimitiveArg {
+export interface PrimitiveArg {
   type: typeof SerializerTypes.PRIMITIVE;
   value: any;
 }
 
-interface RegistryObjectArg {
+export interface StoreObjectArg {
   type: typeof SerializerTypes.STORE_OBJECT;
-  value: object;
+  value: any;
 }
 
-interface RendererType2Arg {
+export interface RendererType2Arg {
   type: typeof SerializerTypes.RENDERER_TYPE_2;
   value: RendererType2;
 }
@@ -31,7 +30,7 @@ interface RendererType2Arg {
 export type FnArg =
   | SerializedArg
   | PrimitiveArg
-  | RegistryObjectArg
+  | StoreObjectArg
   | RendererType2Arg;
 
 export function isPrimitiveArg(type: SerializerTypes): boolean {
@@ -46,9 +45,9 @@ export function isRendererType2Arg(type: SerializerTypes): boolean {
   return type === SerializerTypes.RENDERER_TYPE_2;
 }
 
-export function fnArg(value: any, type?: SerializerTypes.PRIMITIVE): SerializedArg;
-export function fnArg(value: object, type: SerializerTypes.STORE_OBJECT): SerializedArg;
-export function fnArg(value: RendererType2, type: SerializerTypes.RENDERER_TYPE_2): SerializedArg;
+export function fnArg(value: any, type?: SerializerTypes.PRIMITIVE): PrimitiveArg;
+export function fnArg(value: object, type: SerializerTypes.STORE_OBJECT): StoreObjectArg;
+export function fnArg(value: RendererType2, type: SerializerTypes.RENDERER_TYPE_2): RendererType2Arg;
 export function fnArg(value: any = null, type: SerializerTypes = SerializerTypes.PRIMITIVE): SerializedArg {
   return { type, value };
 }
@@ -88,8 +87,15 @@ export class AllocatedNode {
   events = new EventEmitter();
 }
 
-export interface EventMessage {
-  target: 'window' | 'document' | 'body' | number | any;
-  eventName: string;
-  event: any;
+export interface RendererCommand {
+  target: 'renderer';
+  method: RendererMethods2;
+  fnArgs: any[];
+}
+
+export type CommandType =
+  | RendererCommand;
+
+export function command(target: 'renderer', method: RendererMethods2, fnArgs: any[]): CommandType {
+  return { target, method, fnArgs };
 }

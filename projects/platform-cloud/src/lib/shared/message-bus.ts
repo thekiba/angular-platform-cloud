@@ -1,8 +1,7 @@
 import { Observable } from 'rxjs';
-import { EventMessage, RenderMethods } from './api';
+import { CommandType } from './api';
 
 export abstract class MessageBus {
-  abstract getEvents(): Observable<EventMessage>;
-
-  abstract invoke(method: RenderMethods, fnArgs: any[]): void;
+  abstract getCommands(): Observable<CommandType>;
+  abstract sendCommand(command: CommandType): void;
 }

@@ -1,16 +1,22 @@
 import { Injectable } from '@angular/core';
-import { NEVER, Observable } from 'rxjs';
-import { EventMessage, MessageBus, RenderMethods } from '../shared';
+import { Observable } from 'rxjs';
+import { CommandType, MessageBus } from '../shared';
+import { BrowserCommandSubject, ServerCommandSubject } from './server-message-subject';
 
 @Injectable()
 export class ServerMessageBus extends MessageBus {
 
-  getEvents(): Observable<EventMessage> {
-    return NEVER;
+  constructor(private fromServer: ServerCommandSubject,
+              private fromBrowser: BrowserCommandSubject) {
+    super();
   }
 
-  invoke(method: RenderMethods, fnArgs: any[]): void {
-    console.log(method, fnArgs);
+  getCommands(): Observable<CommandType> {
+    return this.fromBrowser.asObservable();
+  }
+
+  sendCommand(command: CommandType): void {
+    this.fromServer.next(command);
   }
 
 }

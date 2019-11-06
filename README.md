@@ -66,15 +66,15 @@ Run `npm run serve:dev` for a dev server. Navigate to `http://localhost:4200/`. 
 
 ### Client side
 
- ⭕️ Message Bus
+ ✅️ Message Bus
  
  ✅ Serializer
  
  ✅ Object Store
  
- ⭕️ Rendering
+ ✅️ Rendering
  
- ⭕️ Event Manager
+ ✅️ Event Manager
  
  ❌ Location
  

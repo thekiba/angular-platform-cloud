@@ -11,13 +11,15 @@ export class ObjectStore implements OnDestroy {
     return this.id++;
   }
 
-  allocateNode(element = new AllocatedNode()): AllocatedNode {
-    const id = this.allocateId();
+  allocateNode(
+    element: AllocatedNode | any = new AllocatedNode(),
+    id = this.allocateId()
+  ): AllocatedNode {
     this.store(element, id);
     return element;
   }
 
-  deallocateNode(node: AllocatedNode): void {
+  deallocateNode(node: AllocatedNode | any): void {
     const id = this.lookupByObject.get(node);
     this.lookupByObject.delete(node);
     this.lookupById.delete(id);
@@ -34,7 +36,7 @@ export class ObjectStore implements OnDestroy {
       : null;
   }
 
-  deserialize(id: number): AllocatedNode {
+  deserialize(id: number): AllocatedNode | any {
     return this.lookupById.has(id)
       ? this.lookupById.get(id)
       : null;
