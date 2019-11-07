@@ -1,4 +1,4 @@
-import { CommonModule, DOCUMENT } from '@angular/common';
+import { DOCUMENT } from '@angular/common';
 import { APP_ID, APP_INITIALIZER, ApplicationModule, NgModule, RendererFactory2, StaticProvider } from '@angular/core';
 import {
   EventManager,
@@ -22,10 +22,7 @@ export const PLATFORM_CLOUD_SERVER_TRANSIENT_PROVIDERS: StaticProvider = [
 ];
 
 @NgModule({
-  exports: [
-    ApplicationModule,
-    CommonModule
-  ],
+  exports: [ ApplicationModule ],
   providers: PLATFORM_CLOUD_SERVER_TRANSIENT_PROVIDERS
 })
 export class CloudBrowserModule {}

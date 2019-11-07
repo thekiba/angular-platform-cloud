@@ -6,27 +6,29 @@ import {
   HAMMER_GESTURE_CONFIG,
   HammerGestureConfig,
   ɵBROWSER_SANITIZATION_PROVIDERS as BROWSER_SANITIZATION_PROVIDERS,
+  ɵBROWSER_SANITIZATION_PROVIDERS__POST_R3__ as BROWSER_SANITIZATION_PROVIDERS__POST_R3__,
   ɵDomEventsPlugin as DomEventsPlugin,
   ɵHammerGesturesPlugin as HammerGesturesPlugin,
   ɵKeyEventsPlugin as KeyEventsPlugin
 } from '@angular/platform-browser';
+import { ɵNoopNgZone as NoopNgZone } from '@angular/core';
 
 export { CloudServerModule, ServerCommandSubject, BrowserCommandSubject } from './server';
 export { CloudBrowserModule } from './browser';
 export { CommandType } from './shared';
 
-export const PLATFORM_CLOUD_SHARED_PROVIDERS: StaticProvider[] = [
-  {provide: NgZone, useFactory: createNgZone, deps: []}
-];
+export const PLATFORM_CLOUD_SHARED_PROVIDERS: StaticProvider[] = [];
 
 export const PLATFORM_CLOUD_SERVER_PROVIDERS: StaticProvider[] = [
   BROWSER_SANITIZATION_PROVIDERS,
+  {provide: NgZone, useFactory: createNgZone, deps: []},
   { provide: ErrorHandler, useFactory: errorHandler, deps: [] },
   { provide: DOCUMENT, useValue: {} }
 ];
 
 export const PLATFORM_CLOUD_BROWSER_PROVIDERS: StaticProvider[] = [
-  BROWSER_SANITIZATION_PROVIDERS,
+  BROWSER_SANITIZATION_PROVIDERS__POST_R3__,
+  { provide: NgZone, useClass: NoopNgZone },
   {
     provide: EVENT_MANAGER_PLUGINS,
     useClass: DomEventsPlugin,
