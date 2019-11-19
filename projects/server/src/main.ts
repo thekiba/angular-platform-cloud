@@ -1,11 +1,21 @@
 import './polyfills';
 import { enableProdMode, PlatformRef, StaticProvider } from '@angular/core';
-import { BrowserCommandSubject, CommandType, ServerCommandSubject } from '@angular/platform-cloud';
+import { BrowserCommandSubject, CommandType, ServerCommandSubject, DEFAULT_LOCATION_STATE } from '@angular/platform-cloud';
 import { bootstrapCloudServerDynamic } from '@angular/platform-cloud-dynamic';
 import * as express from 'express';
 import * as expressWs from 'express-ws';
 import { Subject } from 'rxjs';
 import { AppModule } from './app/app.module';
+
+/**
+ * ✨🦊 Hi there, folks!
+ *
+ * You can see a lot of dirty code below
+ * That is not production-ready yet
+ * That will be removed that in the future
+ *
+ * Thanks for your interesting in Angular Platform Cloud!
+ */
 
 // Faster server renders w/ Prod mode (dev mode never needed)
 enableProdMode();
@@ -28,26 +38,55 @@ router.ws('/cloud', (ws, req) => {
     fromBrowser.next(command);
   });
 
-  const BOOTSTRAP_PROVIDERS: StaticProvider[] = [
-    { provide: ServerCommandSubject, useValue: fromServer },
-    { provide: BrowserCommandSubject, useValue: fromBrowser }
-  ];
-
   let ref: PlatformRef;
-  bootstrapCloudServerDynamic(BOOTSTRAP_PROVIDERS).then(async (_) => {
-    ref = _;
-    await ref.bootstrapModule(AppModule);
-  });
+  const defaultLocationState = {
+    location: null,
+    baseHref: null,
+    state: null
+  };
+  const beforeStartListener = (message) => {
+    const command: CommandType = JSON.parse(message.toString('utf-8'));
+
+    // Todo: cleanup below
+    if (command.method === 'getBaseHrefFromDOM') {
+      defaultLocationState.baseHref = command.fnArgs[0];
+    }
+
+    if (command.method === 'getState') {
+      defaultLocationState.state = command.fnArgs[0];
+    }
+
+    if (command.method === 'getLocation') {
+      defaultLocationState.location = command.fnArgs[0];
+
+      const BOOTSTRAP_PROVIDERS: StaticProvider[] = [
+        { provide: ServerCommandSubject, useValue: fromServer },
+        { provide: BrowserCommandSubject, useValue: fromBrowser },
+        { provide: DEFAULT_LOCATION_STATE, useValue: defaultLocationState }
+      ];
+
+      bootstrapCloudServerDynamic(BOOTSTRAP_PROVIDERS).then(async (_) => {
+        ref = _;
+        await ref.bootstrapModule(AppModule);
+      });
+
+      ws.removeEventListener('message', beforeStartListener);
+    }
+  };
+
+  ws.on('message', beforeStartListener);
 
   ws.on('close', () => {
-    if (ref) {
-      ref.destroy();
-      ref = null;
-    }
+    try {
+      if (ref) {
+        ref.destroy();
+        ref = null;
+      }
 
-    if (fromServerSubscription) {
-      fromServerSubscription.unsubscribe();
-    }
+      if (fromServerSubscription) {
+        fromServerSubscription.unsubscribe();
+      }
+    } catch (e) {}
   });
 });
 
@@ -61,3 +100,7 @@ process.on('SIGTERM', () => {
     console.log('Process terminated');
   });
 });
+process.on('uncaughtException', (err) => {
+  console.log(err);
+});
+

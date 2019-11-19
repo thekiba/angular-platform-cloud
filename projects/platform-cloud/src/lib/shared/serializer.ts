@@ -1,5 +1,5 @@
 import { Injectable, RendererType2 } from '@angular/core';
-import { isPrimitiveArg, isStoreObjectArg, isRendererType2Arg, SerializerTypes } from './api';
+import { isPrimitiveArg, isStoreObjectArg, isRendererType2Arg, SerializerTypes, isDomEventTypeArg, DOM_EVENT_KEYS } from './api';
 import { ObjectStore } from './object-store';
 
 @Injectable({ providedIn: 'root' })
@@ -10,6 +10,9 @@ export class Serializer {
   serialize(value: any, type: SerializerTypes = SerializerTypes.PRIMITIVE): Object {
     if (value === null || isPrimitiveArg(type)) {
       return value;
+    }
+    if (isDomEventTypeArg(type)) {
+      return this.serializeDomEvent(value);
     }
     if (Array.isArray(value)) {
       return value.map(_ => this.serialize(_, type));
@@ -26,6 +29,9 @@ export class Serializer {
   deserialize(value: any, type: SerializerTypes = SerializerTypes.PRIMITIVE): any {
     if (value === null || isPrimitiveArg(type)) {
       return value;
+    }
+    if (isDomEventTypeArg(type)) {
+      return this.deserializeDomEvent(value);
     }
     if (Array.isArray(value)) {
       return value.map(_ => this.deserialize(_, type));
@@ -55,6 +61,27 @@ export class Serializer {
       styles: this.deserialize(type.styles),
       data: this.deserialize(type.data)
     };
+  }
+
+  private serializeDomEvent(event: any): any {
+    let result = null;
+    if (event) {
+      result = {};
+      for (const key of DOM_EVENT_KEYS) {
+        result[ key ] = event[ key ];
+      }
+
+      if (event.target) {
+        result.target = {
+          value: event.target.value
+        };
+      }
+    }
+    return result;
+  }
+
+  private deserializeDomEvent(event: any): any {
+    return event;
   }
 
 }

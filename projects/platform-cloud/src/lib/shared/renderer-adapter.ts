@@ -1,4 +1,4 @@
-import { PrimitiveArg, RendererType2Arg, StoreObjectArg } from './api';
+import { DomEventArg, PrimitiveArg, RendererType2Arg, StoreObjectArg } from './api';
 
 export type RendererMethods2 = keyof RendererAdapter2;
 
@@ -12,7 +12,7 @@ export abstract class RendererAdapter2 {
 
   abstract appendChild(rendererArg: StoreObjectArg, parentArg: StoreObjectArg, newChildArg: StoreObjectArg): void;
 
-  abstract click(rendererArg: StoreObjectArg, targetElArg: StoreObjectArg, targetNameArg: PrimitiveArg, eventNameArg: PrimitiveArg): void;
+  abstract event(rendererArg: StoreObjectArg, targetElArg: StoreObjectArg, targetNameArg: PrimitiveArg, eventNameArg: PrimitiveArg, eventArg: DomEventArg): void;
 
   abstract createComment(rendererArg: StoreObjectArg, valueArg: PrimitiveArg, commentElementArg: StoreObjectArg): void;
 

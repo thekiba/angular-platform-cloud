@@ -1,5 +1,14 @@
 import { DOCUMENT } from '@angular/common';
-import { createPlatformFactory, ErrorHandler, isDevMode, NgZone, platformCore, PlatformRef, StaticProvider } from '@angular/core';
+import {
+  createPlatformFactory,
+  ErrorHandler,
+  isDevMode,
+  NgZone, PLATFORM_INITIALIZER,
+  platformCore,
+  PlatformRef,
+  StaticProvider,
+  ɵsetDocument as setDocument
+} from '@angular/core';
 import {
   EVENT_MANAGER_PLUGINS,
   EventManager,
@@ -7,12 +16,14 @@ import {
   HammerGestureConfig,
   ɵBROWSER_SANITIZATION_PROVIDERS as BROWSER_SANITIZATION_PROVIDERS,
   ɵBROWSER_SANITIZATION_PROVIDERS__POST_R3__ as BROWSER_SANITIZATION_PROVIDERS__POST_R3__,
+  ɵBrowserDomAdapter as BrowserDomAdapter,
+  ɵBrowserGetTestability as BrowserGetTestability,
   ɵDomEventsPlugin as DomEventsPlugin,
   ɵHammerGesturesPlugin as HammerGesturesPlugin,
   ɵKeyEventsPlugin as KeyEventsPlugin
 } from '@angular/platform-browser';
 import { ɵNoopNgZone as NoopNgZone } from '@angular/core';
-
+export { DEFAULT_LOCATION_STATE } from './server/server-location-state';
 export { CloudServerModule, ServerCommandSubject, BrowserCommandSubject } from './server';
 export { CloudBrowserModule } from './browser';
 export { CommandType } from './shared';
@@ -28,6 +39,8 @@ export const PLATFORM_CLOUD_SERVER_PROVIDERS: StaticProvider[] = [
 
 export const PLATFORM_CLOUD_BROWSER_PROVIDERS: StaticProvider[] = [
   BROWSER_SANITIZATION_PROVIDERS__POST_R3__,
+  { provide: DOCUMENT, useFactory: _document, deps: [] },
+  { provide: PLATFORM_INITIALIZER, useValue: initDomAdapter, multi: true },
   { provide: NgZone, useClass: NoopNgZone },
   {
     provide: EVENT_MANAGER_PLUGINS,
@@ -44,8 +57,7 @@ export const PLATFORM_CLOUD_BROWSER_PROVIDERS: StaticProvider[] = [
   },
   {provide: HAMMER_GESTURE_CONFIG, useClass: HammerGestureConfig, deps: []},
   {provide: EventManager, deps: [EVENT_MANAGER_PLUGINS, NgZone]},
-  { provide: ErrorHandler, useFactory: errorHandler, deps: [] },
-  { provide: DOCUMENT, useFactory: documentFactory, deps: [] }
+  { provide: ErrorHandler, useFactory: errorHandler, deps: [] }
 ];
 
 
@@ -74,6 +86,13 @@ function errorHandler(): ErrorHandler {
   return new ErrorHandler();
 }
 
-function documentFactory(): Document {
+export function _document(): any {
+  // Tell ivy about the global document
+  setDocument(document);
   return document;
+}
+
+export function initDomAdapter() {
+  BrowserDomAdapter.makeCurrent();
+  BrowserGetTestability.init();
 }

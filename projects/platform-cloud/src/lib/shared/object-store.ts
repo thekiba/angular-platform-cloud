@@ -20,9 +20,11 @@ export class ObjectStore implements OnDestroy {
   }
 
   deallocateNode(node: AllocatedNode | any): void {
-    const id = this.lookupByObject.get(node);
-    this.lookupByObject.delete(node);
-    this.lookupById.delete(id);
+    if (this.lookupByObject.has(node)) {
+      const id = this.lookupByObject.get(node);
+      this.lookupByObject.delete(node);
+      this.lookupById.delete(id);
+    }
   }
 
   store(obj: AllocatedNode, id: number): void {

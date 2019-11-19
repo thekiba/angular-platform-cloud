@@ -1,7 +1,9 @@
 import { Injectable, Renderer2, RendererFactory2 } from '@angular/core';
 import {
   command,
-  FnArg, MessageBus,
+  DomEventArg,
+  FnArg,
+  MessageBus,
   ObjectStore,
   PrimitiveArg,
   RendererAdapter2,
@@ -31,8 +33,8 @@ export class BrowserRendererAdapter2 extends RendererAdapter2 {
     renderer.appendChild(parent, newChild);
   }
 
-  click(rendererArg: StoreObjectArg, targetElArg: StoreObjectArg, targetNameArg: PrimitiveArg, eventNameArg: PrimitiveArg): void {
-    this.callServerRenderer('click', ...arguments);
+  event(rendererArg: StoreObjectArg, targetElArg: StoreObjectArg, targetNameArg: PrimitiveArg, eventNameArg: PrimitiveArg, eventArg: DomEventArg): void {
+    this.callServerRenderer('event', ...arguments);
   }
 
   createComment(rendererArg: StoreObjectArg, valueArg: PrimitiveArg, commentElementArg: StoreObjectArg): void {
@@ -83,13 +85,16 @@ export class BrowserRendererAdapter2 extends RendererAdapter2 {
     listenIdArg: PrimitiveArg
   ): void {
     const [ renderer, targetEl, targetName, eventName, listenId ] = this.deserialize(...arguments);
-    const unlisten = renderer.listen(targetEl || targetName, eventName, () =>
-      this.click(
-        fnArg(renderer, SerializerTypes.STORE_OBJECT),
-        fnArg(targetEl, SerializerTypes.STORE_OBJECT),
-        fnArg(targetName),
-        fnArg(eventName)
-      )
+    const unlisten = renderer.listen(targetEl || targetName, eventName, (event) => {
+        this.event(
+          fnArg(renderer, SerializerTypes.STORE_OBJECT),
+          fnArg(targetEl, SerializerTypes.STORE_OBJECT),
+          fnArg(targetName),
+          fnArg(eventName),
+          fnArg(event, SerializerTypes.DOM_EVENT)
+        );
+        return false;
+      }
     );
     this.store.allocateNode(unlisten, listenId);
   }
@@ -161,6 +166,7 @@ export class BrowserRendererAdapter2 extends RendererAdapter2 {
     if (typeof unlisten === 'function') {
       unlisten();
     }
+    this.store.deallocateNode(unlisten);
   }
 
   private callServerRenderer(method: RendererMethods2, ...fnArgs: FnArg[]): void {

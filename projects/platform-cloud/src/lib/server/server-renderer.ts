@@ -15,12 +15,13 @@ export class ServerRendererFactory2 implements RendererFactory2, OnDestroy {
   ) {
     this.subscription = this.bus.getCommands().subscribe(
       (command: CommandType) => {
-        if (command.target === 'renderer' && command.method === 'click') {
-          this.rendererAdapter.click(
+        if (command.target === 'renderer' && command.method === 'event') {
+          this.rendererAdapter.event(
             fnArg(command.fnArgs[0], SerializerTypes.STORE_OBJECT),
             fnArg(command.fnArgs[1], SerializerTypes.STORE_OBJECT),
             fnArg(command.fnArgs[2]),
-            fnArg(command.fnArgs[3])
+            fnArg(command.fnArgs[3]),
+            fnArg(command.fnArgs[4], SerializerTypes.DOM_EVENT)
           );
         }
       });

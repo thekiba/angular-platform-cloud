@@ -1,11 +1,12 @@
-import { DOCUMENT } from '@angular/common';
+import { DOCUMENT, PlatformLocation, ɵBrowserPlatformLocation as BrowserPlatformLocation } from '@angular/common';
 import { APP_ID, APP_INITIALIZER, ApplicationModule, NgModule, RendererFactory2, StaticProvider } from '@angular/core';
 import {
   EventManager,
   ɵDomRendererFactory2 as DomRendererFactory2,
   ɵDomSharedStylesHost as DomSharedStylesHost
 } from '@angular/platform-browser';
-import { MessageBus, ObjectStore, RendererAdapter2, Serializer } from '../shared';
+import { LocationAdapter, MessageBus, ObjectStore, RendererAdapter2, Serializer } from '../shared';
+import { BrowserLocationAdapter } from './browser-location-adapter';
 import { BrowserMain } from './browser-main';
 import { BrowserMessageBus } from './browser-message-bus';
 import { BrowserRendererAdapter2 } from './browser-renderer-adapter';
@@ -13,11 +14,13 @@ import { BrowserRendererAdapter2 } from './browser-renderer-adapter';
 export const PLATFORM_CLOUD_SERVER_TRANSIENT_PROVIDERS: StaticProvider = [
   { provide: ObjectStore, useClass: ObjectStore, deps: [] },
   { provide: Serializer, useClass: Serializer, deps: [ObjectStore] },
+  { provide: PlatformLocation, useClass: BrowserPlatformLocation, deps: [DOCUMENT] },
   { provide: DomSharedStylesHost, useClass: DomSharedStylesHost, deps: [DOCUMENT] },
+  { provide: LocationAdapter, useClass: BrowserLocationAdapter, deps: [MessageBus, Serializer, ObjectStore, PlatformLocation] },
   { provide: RendererFactory2, useClass: DomRendererFactory2, deps: [EventManager, DomSharedStylesHost, APP_ID] },
   { provide: RendererAdapter2, useClass: BrowserRendererAdapter2, deps: [Serializer, ObjectStore, RendererFactory2, MessageBus] },
   { provide: MessageBus, useClass: BrowserMessageBus, deps: [DOCUMENT] },
-  { provide: BrowserMain, useClass: BrowserMain, deps: [MessageBus, RendererAdapter2] },
+  { provide: BrowserMain, useClass: BrowserMain, deps: [MessageBus, RendererAdapter2, LocationAdapter, PlatformLocation] },
   { provide: APP_INITIALIZER, useFactory: _boostrap, deps: [BrowserMain], multi: true }
 ];
 
@@ -27,6 +30,9 @@ export const PLATFORM_CLOUD_SERVER_TRANSIENT_PROVIDERS: StaticProvider = [
 })
 export class CloudBrowserModule {}
 
-function _boostrap(): () => Promise<true> {
-  return () => Promise.resolve(true);
+export function _boostrap(main: BrowserMain) {
+  return () => {
+    main.bootstrap();
+    return Promise.resolve(true);
+  };
 }

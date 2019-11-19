@@ -1,6 +1,6 @@
 import { Injectable, NgZone, Renderer2 } from '@angular/core';
 import {
-  command,
+  command, DomEventArg,
   FnArg,
   MessageBus,
   PrimitiveArg,
@@ -25,18 +25,18 @@ export class ServerRendererAdapter2 extends RendererAdapter2 {
   }
 
   appendChild(rendererArg: StoreObjectArg, parentArg: StoreObjectArg, newChildArg: StoreObjectArg): void {
-    this.callBrowserRenderer.call(this, 'appendChild', ...arguments);
+    this.callBrowserRenderer('appendChild', ...arguments);
   }
 
-  click(rendererArg: StoreObjectArg, targetElArg: StoreObjectArg, targetNameArg: PrimitiveArg, eventNameArg: PrimitiveArg): void {
-    const [ renderer, targetEl, targetName, eventName ] = this.deserialize(...arguments);
+  event(rendererArg: StoreObjectArg, targetElArg: StoreObjectArg, targetNameArg: PrimitiveArg, eventNameArg: PrimitiveArg, eventArg: DomEventArg): void {
+    const [ renderer, targetEl, targetName, eventName, event ] = this.deserialize(...arguments);
 
     const globalEvent: string = typeof targetName === 'string'
       ? `${ targetName }:${ eventName }`
       : null;
 
     this.ngZone.run(() => {
-      const clickEvent = { isTrusted: true, type: 'click', target: targetEl };
+      const clickEvent = { isTrusted: true, type: 'click', target: targetEl, ...event };
       targetName
         ? this.globalEvents.emit(globalEvent, clickEvent)
         : targetEl.events.emit(eventName, clickEvent);
@@ -44,85 +44,85 @@ export class ServerRendererAdapter2 extends RendererAdapter2 {
   }
 
   createComment(rendererArg: StoreObjectArg, valueArg: PrimitiveArg, commentElementArg: StoreObjectArg): void {
-    this.callBrowserRenderer.call(this, 'createComment', ...arguments);
+    this.callBrowserRenderer('createComment', ...arguments);
   }
 
   createElement(rendererArg: StoreObjectArg, nameArg: PrimitiveArg, namespaceArg: PrimitiveArg, elementArg: StoreObjectArg): void {
-    this.callBrowserRenderer.call(this, 'createElement', ...arguments);
+    this.callBrowserRenderer('createElement', ...arguments);
   }
 
   createRenderer(hostElementArg: StoreObjectArg, typeArg: RendererType2Arg, rendererArg: StoreObjectArg): void {
-    this.callBrowserRenderer.call(this, 'createRenderer', ...arguments);
+    this.callBrowserRenderer('createRenderer', ...arguments);
   }
 
   createText(rendererArg: StoreObjectArg, valueArg: PrimitiveArg, textElementArg: StoreObjectArg): void {
-    this.callBrowserRenderer.call(this, 'createText', ...arguments);
+    this.callBrowserRenderer('createText', ...arguments);
   }
 
   destroy(rendererArg: StoreObjectArg): void {
-    this.callBrowserRenderer.call(this, 'destroy', ...arguments);
+    this.callBrowserRenderer('destroy', ...arguments);
   }
 
   destroyNode(rendererArg: StoreObjectArg, nodeArg: StoreObjectArg): void {
-    this.callBrowserRenderer.call(this, 'destroyNode', ...arguments);
+    this.callBrowserRenderer('destroyNode', ...arguments);
   }
 
   insertBefore(rendererArg: StoreObjectArg, parentArg: StoreObjectArg, newChildArg: StoreObjectArg, refChildArg: StoreObjectArg): void {
-    this.callBrowserRenderer.call(this, 'insertBefore', ...arguments);
+    this.callBrowserRenderer('insertBefore', ...arguments);
   }
 
   listen(
     rendererArg: StoreObjectArg, targetElArg: StoreObjectArg, targetNameArg: PrimitiveArg, eventNameArg: PrimitiveArg, listenIdArg: PrimitiveArg): void {
-    this.callBrowserRenderer.call(this, 'listen', ...arguments);
+    this.callBrowserRenderer('listen', ...arguments);
   }
 
   nextSibling(rendererArg: StoreObjectArg, nodeArg: StoreObjectArg, elementArg: StoreObjectArg): void {
-    this.callBrowserRenderer.call(this, 'nextSibling', ...arguments);
+    this.callBrowserRenderer('nextSibling', ...arguments);
   }
 
   parentNode(rendererArg: StoreObjectArg, nodeArg: StoreObjectArg, elementArg: StoreObjectArg): void {
-    this.callBrowserRenderer.call(this, 'parentNode', ...arguments);
+    this.callBrowserRenderer('parentNode', ...arguments);
   }
 
   removeAttribute(rendererArg: StoreObjectArg, elArg: StoreObjectArg, nameArg: PrimitiveArg, namespaceArg: PrimitiveArg): void {
-    this.callBrowserRenderer.call(this, 'removeAttribute', ...arguments);
+    this.callBrowserRenderer('removeAttribute', ...arguments);
   }
 
   removeChild(rendererArg: StoreObjectArg, parentArg: StoreObjectArg, oldChildArg: StoreObjectArg, isHostElementArg: PrimitiveArg): void {
-    this.callBrowserRenderer.call(this, 'removeChild', ...arguments);
+    this.callBrowserRenderer('removeChild', ...arguments);
   }
 
   removeClass(rendererArg: StoreObjectArg, elArg: StoreObjectArg, nameArg: PrimitiveArg): void {
-    this.callBrowserRenderer.call(this, 'removeClass', ...arguments);
+    this.callBrowserRenderer('removeClass', ...arguments);
   }
 
   removeStyle(rendererArg: StoreObjectArg, elArg: StoreObjectArg, styleArg: PrimitiveArg, flagsArg: PrimitiveArg): void {
-    this.callBrowserRenderer.call(this, 'removeStyle', ...arguments);
+    this.callBrowserRenderer('removeStyle', ...arguments);
   }
 
   selectRootElement(
     rendererArg: StoreObjectArg, selectorOrNodeArg: PrimitiveArg, preserveContentArg: PrimitiveArg, rootElementArg: StoreObjectArg): void {
-    this.callBrowserRenderer.call(this, 'selectRootElement', ...arguments);
+    this.callBrowserRenderer('selectRootElement', ...arguments);
   }
 
   setAttribute(rendererArg: StoreObjectArg, elArg: StoreObjectArg, nameArg: PrimitiveArg, valueArg: PrimitiveArg, namespaceArg: PrimitiveArg): void {
-    this.callBrowserRenderer.call(this, 'setAttribute', ...arguments);
+    this.callBrowserRenderer('setAttribute', ...arguments);
   }
 
   setProperty(rendererArg: StoreObjectArg, elArg: StoreObjectArg, nameArg: PrimitiveArg, valueArg: PrimitiveArg): void {
-    this.callBrowserRenderer.call(this, 'setProperty', ...arguments);
+    this.callBrowserRenderer('setProperty', ...arguments);
   }
 
   setStyle(rendererArg: StoreObjectArg, elArg: StoreObjectArg, styleArg: PrimitiveArg, valueArg: PrimitiveArg, flagsArg: PrimitiveArg): void {
-    this.callBrowserRenderer.call(this, 'setStyle', ...arguments);
+    this.callBrowserRenderer('setStyle', ...arguments);
   }
 
   setValue(rendererArg: StoreObjectArg, nodeArg: StoreObjectArg, valueArg: PrimitiveArg): void {
-    this.callBrowserRenderer.call(this, 'setValue', ...arguments);
+    this.callBrowserRenderer('setValue', ...arguments);
   }
 
   unlisten(rendererArg: StoreObjectArg, listenIdArg: PrimitiveArg): void {
-    this.callBrowserRenderer.call(this, 'unlisten', ...arguments);
+    this.callBrowserRenderer('unlisten', ...arguments);
   }
 
   private callBrowserRenderer(method: RendererMethods2, ...fnArgs: FnArg[]): void {
