@@ -33,6 +33,7 @@ I invite everyone to participate in the development of ✨🦊 **Angular Platfor
  | Rendering              |  ✅                | ✅                       |
  | Event Manager          |  ✅                | ✅                       |
  | Location               |  ✅                | ✅                       |
+ | Animations             |  ✅                | ✅                       |
  | Viewport Scroller      |  ⭕ not yet        | ⭕ not yet               |
  | Styles Host            |  ✅                | ✅                       |
  | Error Handler          |  ✅                | ✅                       |
