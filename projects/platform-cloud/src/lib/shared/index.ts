@@ -6,3 +6,4 @@ export * from './message-bus';
 export * from './serializer';
 export * from './object-store';
 export * from './renderer-adapter';
+export * from './animation-engine-adapter';

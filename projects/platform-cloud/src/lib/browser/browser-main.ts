@@ -2,13 +2,15 @@ import { PlatformLocation } from '@angular/common';
 import { Injectable, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import {
+  AnimationEngineAdapter,
+  AnimationEngineCommand,
   CommandType,
   fnArg,
   LocationAdapter,
   LocationCommand,
   LocationState,
   MessageBus,
-  RendererAdapter2,
+  RendererAdapter2, RendererCommand,
   SerializerTypes
 } from '../shared';
 
@@ -18,7 +20,8 @@ export class BrowserMain implements OnDestroy {
   private subscription: Subscription;
 
   constructor(private bus: MessageBus, private rendererAdapter: RendererAdapter2,
-              private locationAdapter: LocationAdapter, private platformLocation: PlatformLocation) {
+              private locationAdapter: LocationAdapter, private platformLocation: PlatformLocation,
+              private animationEngineAdapter: AnimationEngineAdapter) {
   }
 
   bootstrap(): void {
@@ -56,6 +59,10 @@ export class BrowserMain implements OnDestroy {
     if (command.target === 'location') {
       this.processLocationCommand(command);
     }
+
+    if (command.target === 'animation-engine') {
+      this.processAnimationEngineCommand(command);
+    }
   }
 
   ngOnDestroy(): void {
@@ -65,9 +72,15 @@ export class BrowserMain implements OnDestroy {
     }
   }
 
-  private processRendererCommand(command: CommandType) {
+  private processRendererCommand(command: RendererCommand) {
     const next = toIterator(command.fnArgs);
     switch (command.method) {
+      case 'begin':
+        this.rendererAdapter.begin();
+        break;
+      case 'end':
+        this.rendererAdapter.end();
+        break;
       case 'createRenderer':
         this.rendererAdapter.createRenderer(
           fnArg(next(), SerializerTypes.STORE_OBJECT),
@@ -94,6 +107,8 @@ export class BrowserMain implements OnDestroy {
           fnArg(next(), SerializerTypes.STORE_OBJECT),
           fnArg(next(), SerializerTypes.STORE_OBJECT)
         );
+        break;
+      case 'event':
         break;
       case 'createComment':
         this.rendererAdapter.createComment(
@@ -281,6 +296,98 @@ export class BrowserMain implements OnDestroy {
         break;
       default:
         throw new Error(`Unknown location method ${ command.method }`);
+    }
+  }
+
+  private processAnimationEngineCommand(command: AnimationEngineCommand) {
+    const next = toIterator(command.fnArgs);
+    switch (command.method) {
+      case 'destroy':
+        this.animationEngineAdapter.destroy(
+          fnArg(next()),
+          fnArg(next(), SerializerTypes.STORE_OBJECT)
+        );
+        break;
+      case 'disableAnimations':
+        this.animationEngineAdapter.disableAnimations(
+          fnArg(next(), SerializerTypes.STORE_OBJECT),
+          fnArg(next())
+        );
+        break;
+      case 'flush':
+        this.animationEngineAdapter.flush(
+          fnArg(next())
+        );
+        break;
+      case 'event':
+        this.animationEngineAdapter.event(
+          fnArg(next(), SerializerTypes.STORE_OBJECT),
+          fnArg(next()),
+          fnArg(next(), SerializerTypes.DOM_EVENT)
+        );
+        break;
+      case 'listen':
+        this.animationEngineAdapter.listen(
+          fnArg(next()),
+          fnArg(next(), SerializerTypes.STORE_OBJECT),
+          fnArg(next()),
+          fnArg(next()),
+          fnArg(next())
+        );
+        break;
+      case 'unlisten':
+        this.animationEngineAdapter.unlisten(
+          fnArg(next())
+        );
+        break;
+      case 'onInsert':
+        this.animationEngineAdapter.onInsert(
+          fnArg(next()),
+          fnArg(next(), SerializerTypes.STORE_OBJECT),
+          fnArg(next(), SerializerTypes.STORE_OBJECT),
+          fnArg(next())
+        );
+        break;
+      case 'onRemove':
+        this.animationEngineAdapter.onRemove(
+          fnArg(next()),
+          fnArg(next(), SerializerTypes.STORE_OBJECT),
+          fnArg(next(), SerializerTypes.STORE_OBJECT),
+          fnArg(next())
+        );
+        break;
+      case 'onRemovalComplete':
+        this.animationEngineAdapter.onRemovalComplete(
+          fnArg(next(), SerializerTypes.STORE_OBJECT),
+          fnArg(next(), SerializerTypes.STORE_OBJECT)
+        );
+        break;
+      case 'process':
+        this.animationEngineAdapter.process(
+          fnArg(next()),
+          fnArg(next(), SerializerTypes.STORE_OBJECT),
+          fnArg(next()),
+          fnArg(next())
+        );
+        break;
+      case 'register':
+        this.animationEngineAdapter.register(
+          fnArg(next()),
+          fnArg(next(), SerializerTypes.STORE_OBJECT)
+        );
+        break;
+      case 'registerTrigger':
+        this.animationEngineAdapter.registerTrigger(
+          fnArg(next()),
+          fnArg(next()),
+          fnArg(next(), SerializerTypes.STORE_OBJECT),
+          fnArg(next()),
+          fnArg(next())
+        );
+        break;
+
+      default:
+        throw new Error(`Unknown animation engine method ${ command.method }`);
     }
   }
 }

@@ -1,4 +1,5 @@
 import { RendererType2 } from '@angular/core';
+import { AnimationEngineMethods } from './animation-engine-adapter';
 import { LocationMethods } from './location-adapter';
 import { RendererMethods2 } from './renderer-adapter';
 
@@ -107,6 +108,7 @@ export class EventEmitter {
 
 export class AllocatedNode {
   events = new EventEmitter();
+  nodeType = 1; // ???
 }
 
 export interface RendererCommand {
@@ -121,12 +123,20 @@ export interface LocationCommand {
   fnArgs: any[];
 }
 
+export interface AnimationEngineCommand {
+  target: 'animation-engine';
+  method: AnimationEngineMethods;
+  fnArgs: any[];
+}
+
 export type CommandType =
   | RendererCommand
-  | LocationCommand;
+  | LocationCommand
+  | AnimationEngineCommand;
 
 export function command(target: 'renderer', method: RendererMethods2, fnArgs: any[]): CommandType;
 export function command(target: 'location', method: LocationMethods, fnArgs: any[]): CommandType;
+export function command(target: 'animation-engine', method: AnimationEngineMethods, fnArgs: any[]): CommandType;
 export function command(target: any, method: any, fnArgs: any[]): CommandType {
   return { target, method, fnArgs };
 }

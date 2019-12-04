@@ -52,6 +52,5 @@ export class ObjectStore implements OnDestroy {
   ngOnDestroy(): void {
     this.clear();
   }
-
 }
 

@@ -4,6 +4,10 @@ export type RendererMethods2 = keyof RendererAdapter2;
 
 export abstract class RendererAdapter2 {
 
+  abstract begin(): void;
+
+  abstract end(): void;
+
   abstract createRenderer(hostElementArg: StoreObjectArg, typeArg: RendererType2Arg, rendererArg: StoreObjectArg): void;
 
   abstract destroyNode(rendererArg: StoreObjectArg, nodeArg: StoreObjectArg): void;

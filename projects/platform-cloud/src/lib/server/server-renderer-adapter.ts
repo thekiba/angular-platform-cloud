@@ -20,6 +20,14 @@ export class ServerRendererAdapter2 extends RendererAdapter2 {
     super();
   }
 
+  begin(): void {
+    this.callBrowserRenderer('begin');
+  }
+
+  end(): void {
+    this.callBrowserRenderer('begin');
+  }
+
   addClass(rendererArg: StoreObjectArg, elArg: StoreObjectArg, nameArg: PrimitiveArg): void {
     this.callBrowserRenderer('addClass', ...arguments);
   }

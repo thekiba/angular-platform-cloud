@@ -3,6 +3,7 @@ import {
   command,
   DomEventArg,
   FnArg,
+  fnArg,
   MessageBus,
   ObjectStore,
   PrimitiveArg,
@@ -13,7 +14,6 @@ import {
   SerializerTypes,
   StoreObjectArg
 } from '../shared';
-import { fnArg } from '../shared/api';
 
 @Injectable()
 export class BrowserRendererAdapter2 extends RendererAdapter2 {
@@ -23,9 +23,19 @@ export class BrowserRendererAdapter2 extends RendererAdapter2 {
     super();
   }
 
+  begin(): void {
+    this.factory.begin();
+  }
+
+  end(): void {
+    this.factory.end();
+  }
+
   addClass(rendererArg: StoreObjectArg, elArg: StoreObjectArg, nameArg: PrimitiveArg): void {
     const [ renderer, el, name ] = this.deserialize(...arguments);
-    renderer.addClass(el, name);
+    if (el.classList) {
+      renderer.addClass(el, name);
+    }
   }
 
   appendChild(rendererArg: StoreObjectArg, parentArg: StoreObjectArg, newChildArg: StoreObjectArg): void {
@@ -123,7 +133,9 @@ export class BrowserRendererAdapter2 extends RendererAdapter2 {
 
   removeClass(rendererArg: StoreObjectArg, elArg: StoreObjectArg, nameArg: PrimitiveArg): void {
     const [ renderer, el, name ] = this.deserialize(...arguments);
-    renderer.removeClass(el, name);
+    if (el.classList) {
+      renderer.removeClass(el, name);
+    }
   }
 
   removeStyle(rendererArg: StoreObjectArg, elArg: StoreObjectArg, styleArg: PrimitiveArg, flagsArg: PrimitiveArg): void {
