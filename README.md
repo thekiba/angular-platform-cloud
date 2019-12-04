@@ -1,7 +1,7 @@
 # ✨🦊 Angular Platform Cloud 🦄✨
 
 <p align="center">
-  <img src="assets/preview.gif" width="882px" alt="preview">
+  <img src="assets/angular-platform-cloud.gif" width="882px" alt="preview">
 </p>
 
 ✨🦊 **The server** generates renderer commands and sends them to the browser.
