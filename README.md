@@ -18,7 +18,7 @@ Perhaps am thinking about goals like this:
 
 ## Help Wanted
 
-I invite everyone to participate in the development of ✨🦊 **Angular Platform Cloud** 🦄✨. To participate, just stamp the blood [Twitter](https://twitter.com/thekiba_io) or [Telegram](https://t.me/thekiba).
+If you want to help develop the ✨🦊 **Angular Platform Cloud** 🦄✨ you can do this by writing to me at [Twitter](https://twitter.com/thekiba_io) or [Telegram](https://t.me/thekiba).
 
 
 ## Roadmap
