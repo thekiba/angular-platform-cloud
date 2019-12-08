@@ -3,8 +3,10 @@ import { APP_ID, APP_INITIALIZER, ApplicationModule, NgModule, RendererFactory2,
 import {
   EventManager,
   ɵDomRendererFactory2 as DomRendererFactory2,
-  ɵDomSharedStylesHost as DomSharedStylesHost
+  ɵDomSharedStylesHost as DomSharedStylesHost,
+  // ɵDefaultRendererFactory2 as DefaultRendererFactory2
 } from '@angular/platform-browser';
+import { ɵAnimationRendererFactory as AnimationRendererFactory } from '@angular/platform-browser/animations';
 import { AnimationEngineAdapter, LocationAdapter, MessageBus, ObjectStore, RendererAdapter2, Serializer } from '../shared';
 import { BrowserAnimationEngineAdapter } from './browser-animation-engine-adapter';
 import { BrowserLocationAdapter } from './browser-location-adapter';
@@ -24,7 +26,7 @@ export const PLATFORM_CLOUD_SERVER_TRANSIENT_PROVIDERS: StaticProvider = [
   { provide: MessageBus, useClass: BrowserMessageBus, deps: [DOCUMENT] },
   { provide: BrowserMain, useClass: BrowserMain, deps: [MessageBus, RendererAdapter2, LocationAdapter, PlatformLocation, AnimationEngineAdapter] },
   { provide: APP_INITIALIZER, useFactory: _boostrap, deps: [BrowserMain], multi: true },
-  { provide: AnimationEngineAdapter, useClass: BrowserAnimationEngineAdapter, deps: [AnimationEngine, Serializer, ObjectStore, MessageBus] }
+  { provide: AnimationEngineAdapter, useClass: BrowserAnimationEngineAdapter, deps: [[ new Optional(), AnimationEngine ], Serializer, ObjectStore, MessageBus, RendererFactory2] }
 ];
 
 @NgModule({

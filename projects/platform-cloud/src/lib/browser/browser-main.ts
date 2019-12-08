@@ -10,7 +10,8 @@ import {
   LocationCommand,
   LocationState,
   MessageBus,
-  RendererAdapter2, RendererCommand,
+  RendererAdapter2,
+  RendererCommand,
   SerializerTypes
 } from '../shared';
 

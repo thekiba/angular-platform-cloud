@@ -1,10 +1,13 @@
 import { ɵAnimationEngine as AnimationEngine } from '@angular/animations/browser';
 import { Injectable } from '@angular/core';
 import {
-  AnimationEngineAdapter, AnimationEngineMethods, command,
+  AnimationEngineAdapter,
+  AnimationEngineMethods,
+  command,
   DomEventArg,
   fnArg,
-  FnArg, MessageBus,
+  FnArg,
+  MessageBus,
   ObjectStore,
   PrimitiveArg,
   Serializer,
@@ -14,9 +17,20 @@ import {
 
 @Injectable()
 export class BrowserAnimationEngineAdapter extends AnimationEngineAdapter {
+
   constructor(private engine: AnimationEngine, private serializer: Serializer, private store: ObjectStore,
               private bus: MessageBus) {
     super();
+
+    if (engine) {
+      const onRemovalComplete = engine.onRemovalComplete;
+      engine.onRemovalComplete = (element, delegate) => {
+        if (!delegate.namespaceId) {
+          element.parentNode.removeChild(element);
+        }
+        onRemovalComplete(element, delegate);
+      };
+    }
   }
 
   destroy(namespaceIdArg: PrimitiveArg, contextArg: StoreObjectArg): void {

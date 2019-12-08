@@ -24,7 +24,7 @@ import {
 } from '@angular/platform-browser';
 import { ɵNoopNgZone as NoopNgZone } from '@angular/core';
 export { DEFAULT_LOCATION_STATE } from './server/server-location-state';
-export { CloudServerModule, ServerCommandSubject, BrowserCommandSubject } from './server';
+export { CloudServerModule, ServerCommandSubject, BrowserCommandSubject, CloudServerAnimationsModule } from './server';
 export { CloudBrowserModule } from './browser';
 export { CommandType } from './shared';
 

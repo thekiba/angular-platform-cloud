@@ -1,4 +1,4 @@
-import { DomEventArg, PrimitiveArg, StoreObjectArg } from './api';
+import { DomEventArg, PrimitiveArg, RendererType2Arg, StoreObjectArg } from './api';
 
 export type AnimationEngineMethods = keyof AnimationEngineAdapter;
 
@@ -33,4 +33,5 @@ export abstract class AnimationEngineAdapter {
     componentIdArg: PrimitiveArg, namespaceIdArg: PrimitiveArg, hostElementArg: StoreObjectArg, nameArg: PrimitiveArg,
     metadataArg: PrimitiveArg
   ): void;
+
 }

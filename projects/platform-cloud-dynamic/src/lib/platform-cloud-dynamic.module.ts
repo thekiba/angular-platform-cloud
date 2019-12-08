@@ -32,7 +32,7 @@ export class ResourceLoaderServerImpl extends ResourceLoader {
 
   get(url: string): Promise<string> {
     return new Promise((res) => {
-      const path = this.path.resolve(this.path.join('projects', 'server', 'src', 'app', url));
+      const path = this.path.resolve(url);
       this.fs.readFile(path, (err, data) => res(data.toString('utf-8')));
     });
   }

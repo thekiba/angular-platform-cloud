@@ -2,7 +2,8 @@ import { Injectable, NgZone } from '@angular/core';
 import {
   AnimationEngineAdapter,
   AnimationEngineMethods,
-  command, DomEventArg,
+  command,
+  DomEventArg,
   FnArg,
   MessageBus,
   PrimitiveArg,
@@ -81,4 +82,5 @@ export class ServerAnimationEngineAdapter extends AnimationEngineAdapter {
   private deserialize(...fnArgs: FnArg[]): [ ...any[] ] {
     return fnArgs.map(arg => this.serializer.deserialize(arg.value, arg.type)) as [ ...any[] ];
   }
+
 }

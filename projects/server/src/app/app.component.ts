@@ -3,8 +3,8 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
+  templateUrl: 'projects/server/src/app/app.component.html',
+  styleUrls: ['projects/server/src/app/app.component.css'],
   animations: [
     trigger('openClose', [
       state('open', style({
@@ -22,6 +22,22 @@ import { Component } from '@angular/core';
       ]),
       transition('closed => open', [
         animate('0.5s')
+      ]),
+    ]),
+    trigger('showHide', [
+      transition(':enter', [
+        animate('1s', style({
+          height: '200px',
+          opacity: 1,
+          backgroundColor: 'yellow'
+        }))
+      ]),
+      transition(':leave', [
+        animate('0.5s', style({
+          height: '100px',
+          opacity: 0.5,
+          backgroundColor: 'purple'
+        }))
       ]),
     ]),
   ]

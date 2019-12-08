@@ -1,30 +1,7 @@
-import { AnimationBuilder } from '@angular/animations';
-import {
-  AnimationDriver,
-  ɵAnimationEngine as AnimationEngine,
-  ɵAnimationStyleNormalizer as AnimationStyleNormalizer,
-  ɵNoopAnimationDriver as NoopAnimationDriver,
-  ɵNoopAnimationStyleNormalizer as NoopAnimationStyleNormalizer
-} from '@angular/animations/browser';
 import { CommonModule, DOCUMENT, PlatformLocation, ViewportScroller } from '@angular/common';
-import { ApplicationModule, NgModule, NgZone, Provider, RendererFactory2, StaticProvider } from '@angular/core';
-import {
-  ANIMATION_MODULE_TYPE,
-  ɵAnimationRendererFactory as AnimationRendererFactory,
-  ɵBrowserAnimationBuilder as BrowserAnimationBuilder
-} from '@angular/platform-browser/animations';
+import { ApplicationModule, NgModule, NgZone, RendererFactory2, StaticProvider } from '@angular/core';
 
-import {
-  AnimationEngineAdapter,
-  LocationAdapter,
-  MessageBus,
-  ObjectStore,
-  RendererAdapter2,
-  Serializer,
-  SharedStylesHost
-} from '../shared';
-import { ServerAnimationEngine } from './server-animation-engine';
-import { ServerAnimationEngineAdapter } from './server-animation-engine-adapter';
+import { LocationAdapter, MessageBus, ObjectStore, RendererAdapter2, Serializer, SharedStylesHost } from '../shared';
 import { ServerMessageBus } from './server-bus';
 import { ServerGlobalEvents } from './server-global-events';
 import { ServerPlatformLocation } from './server-location';
@@ -51,25 +28,8 @@ export const PLATFORM_CLOUD_SERVER_TRANSIENT_PROVIDERS: StaticProvider[] = [
     deps: [SharedStylesHost, MessageBus, ObjectStore, RendererAdapter2, ServerGlobalEvents]
   },
   { provide: SharedStylesHost, useClass: ServerStylesHost, deps: [DOCUMENT] },
-  { provide: RendererAdapter2, useClass: ServerRendererAdapter2, deps: [MessageBus, Serializer, ServerGlobalEvents, NgZone] }
-];
-
-export function instantiateRendererFactory(
-  renderer: ServerRendererFactory2, engine: AnimationEngine, zone: NgZone) {
-  return new AnimationRendererFactory(renderer, engine, zone);
-}
-
-const PLATFORM_CLOUD_SERVER_ANIMATIONS_PROVIDERS: Provider[] = [
-  { provide: AnimationEngineAdapter, useClass: ServerAnimationEngineAdapter, deps: [MessageBus, Serializer, NgZone] },
-  { provide: AnimationBuilder, useClass: BrowserAnimationBuilder },
-  { provide: AnimationStyleNormalizer, useClass: NoopAnimationStyleNormalizer },
-  { provide: AnimationEngine, useClass: ServerAnimationEngine, deps: [DOCUMENT, AnimationDriver, AnimationStyleNormalizer, AnimationEngineAdapter, ObjectStore] }, {
-    provide: RendererFactory2,
-    useFactory: instantiateRendererFactory,
-    deps: [ServerRendererFactory2, AnimationEngine, NgZone]
-  },
-  { provide: AnimationDriver, useClass: NoopAnimationDriver },
-  { provide: ANIMATION_MODULE_TYPE, useValue: 'ServerAnimations' }
+  { provide: RendererAdapter2, useClass: ServerRendererAdapter2, deps: [MessageBus, Serializer, ServerGlobalEvents, NgZone] },
+  { provide: RendererFactory2, useExisting: ServerRendererFactory2 },
 ];
 
 @NgModule({
@@ -78,8 +38,7 @@ const PLATFORM_CLOUD_SERVER_ANIMATIONS_PROVIDERS: Provider[] = [
     CommonModule
   ],
   providers: [
-    PLATFORM_CLOUD_SERVER_TRANSIENT_PROVIDERS,
-    PLATFORM_CLOUD_SERVER_ANIMATIONS_PROVIDERS
+    PLATFORM_CLOUD_SERVER_TRANSIENT_PROVIDERS
   ]
 })
 export class CloudServerModule {}

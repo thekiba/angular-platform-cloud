@@ -9,10 +9,21 @@ import { fnArg } from '../shared/api';
 
 export class ServerAnimationEngine extends AnimationEngine {
 
+  onRemovalComplete: (element: any, context: any) => void;
+
   constructor(
-    bodyNode: any, _driver: AnimationDriver, normalizer: AnimationStyleNormalizer,
+    bodyNode: any, driver: AnimationDriver, normalizer: AnimationStyleNormalizer,
     private adapter: AnimationEngineAdapter, private store: ObjectStore
-  ) { super(bodyNode, _driver, normalizer); }
+  ) {
+    super(bodyNode, driver, normalizer);
+
+    this.onRemovalComplete = (element: any, context: any) => {
+      this.adapter.onRemovalComplete(
+        fnArg(element, SerializerTypes.STORE_OBJECT),
+        fnArg(context, SerializerTypes.STORE_OBJECT)
+      );
+    };
+  }
 
   destroy(namespaceId: string, context: any): void {
     this.adapter.destroy(
@@ -69,12 +80,6 @@ export class ServerAnimationEngine extends AnimationEngine {
       fnArg(isHostElement)
     );
   }
-
-  onRemovalComplete = (element: any, context: any) =>
-    this.adapter.onRemovalComplete(
-      fnArg(element, SerializerTypes.STORE_OBJECT),
-      fnArg(context, SerializerTypes.STORE_OBJECT)
-    )
 
   process(namespaceId: string, element: any, property: string, value: any): void {
     this.adapter.process(
