@@ -5,7 +5,8 @@ import {
   Injectable,
   ModuleWithComponentFactories,
   PlatformRef,
-  StaticProvider
+  StaticProvider,
+  ɵALLOW_MULTIPLE_PLATFORMS as ALLOW_MULTIPLE_PLATFORMS
 } from '@angular/core';
 import {
   JitCompilerFactory as _JitCompilerFactory,
@@ -45,6 +46,7 @@ export const platformCloudServerDynamic =
       useValue: {providers: [{provide: ResourceLoader, useClass: ResourceLoaderServerImpl, deps: []}]},
       multi: true
     },
+    { provide: ALLOW_MULTIPLE_PLATFORMS, useValue: true },
     PLATFORM_CLOUD_SHARED_PROVIDERS,
     PLATFORM_CLOUD_SERVER_PROVIDERS
   ]);
